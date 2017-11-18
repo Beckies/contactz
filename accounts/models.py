@@ -1,9 +1,24 @@
 from django.db import models
-from django.contrib.auth.models import (AbstractBaseUser, 
-	BaseUserManager)
+from django.contrib.auth.models import AbstractUser
+#from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager)
 
-class Organization(models.Model):
-	name = models.CharField(max_length=240)
+from orgs.models import Organization
+
+
+# Create your models here.
+class User(AbstractUser):
+    username = None
+    email = models.EmailField(unique=True)
+
+    USERNAME_FIELD = email
+    REQUIRED_FIELDS = []
+
+
+class OrgAdmin(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    organization = models.ForeignKey(Organization, related_name='org_admins')
+
 	
 # class User(AbstractBaseUser):
 # 	email 			= models.EmailField(max_length=255, unique=True)
